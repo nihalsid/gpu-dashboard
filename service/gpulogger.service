@@ -1,0 +1,14 @@
+[Unit]
+Description=gpu_logger_daemon
+After=mongod.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=yawar
+ExecStart=/bin/bash /home/yawar/gpu_logger/start_daemon.sh
+
+[Install]
+WantedBy=multi-user.target
