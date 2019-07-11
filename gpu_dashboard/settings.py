@@ -25,7 +25,7 @@ SECRET_KEY = '%7pe$u)mm@5z)8a92a601f3d*6s8j3n2)gmm3+8x768z79=yqs'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["pegasus"]
 
 
 # Application definition

@@ -36,7 +36,7 @@ def get_user_distribution(request):
     user_gpus = defaultdict(int)
     for hostname in last_gpu_entry:
         for index in last_gpu_entry[hostname]:
-            if len(last_gpu_entry[hostname][index]['process_list']) != 0:
+            if last_gpu_entry[hostname][index]['utilization_memory'] > 100 and  len(last_gpu_entry[hostname][index]['process_list']) != 0:
                 for process in last_gpu_entry[hostname][index]['process_list']:
                     if process['username'] != 'root':
                         user_gpus[process['username']] += 1
@@ -65,7 +65,7 @@ def get_usage_history(request):
         day_stats = collection.find({'query_time': {"$gt": time_start, "$lt": time_end}})
         num_occupied = 0
         for log in day_stats:
-            if log['utilization_memory'] != 0 or len(log['process_list']) != 0:
+            if log['utilization_memory'] > 100 and len(log['process_list']) != 0:
                 num_occupied += 1
         timeline.append(time_start.strftime("%d/%b"))
         usage.append(num_occupied * TIME_RESOLUTION / 60.0)
@@ -99,14 +99,14 @@ def index(request):
 
             print(hostname, index, last_gpu_entry[hostname][index]['utilization_memory'], len(last_gpu_entry[hostname][index]['process_list']))
             gpu_current_state[hostname][index] = {
-                'occupied': len(last_gpu_entry[hostname][index]['process_list']) != 0,
+                'occupied': last_gpu_entry[hostname][index]['utilization_memory'] > 100 and len(last_gpu_entry[hostname][index]['process_list']) != 0,
                 'temperature': last_gpu_entry[hostname][index]['temperature'],
                 'utilization_memory': round(last_gpu_entry[hostname][index]['utilization_memory'] / 1024.0),
                 'utilization_gpu': last_gpu_entry[hostname][index]['utilization_gpu'],
                 'total_memory': round(last_gpu_entry[hostname][index]['total_memory'] / 1024.0),
                 'name': last_gpu_entry[hostname][index]['name']
             }
-            if len(last_gpu_entry[hostname][index]['process_list']) != 0:
+            if last_gpu_entry[hostname][index]['utilization_memory'] > 100 and len(last_gpu_entry[hostname][index]['process_list']) != 0:
                 utilization_gpu += 1
                 utilization_per_server[hostname] += 1
 
