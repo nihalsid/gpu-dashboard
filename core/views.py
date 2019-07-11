@@ -97,7 +97,7 @@ def index(request):
     for hostname in last_gpu_entry:
         for index in last_gpu_entry[hostname]:
 
-            print(hostname, index, last_gpu_entry[hostname][index]['utilization_memory'], len(last_gpu_entry[hostname][index]['process_list']))
+            #print(hostname, index, last_gpu_entry[hostname][index]['utilization_memory'], len(last_gpu_entry[hostname][index]['process_list']))
             gpu_current_state[hostname][index] = {
                 'occupied': last_gpu_entry[hostname][index]['utilization_memory'] > 100 and len(last_gpu_entry[hostname][index]['process_list']) != 0,
                 'temperature': last_gpu_entry[hostname][index]['temperature'],
@@ -111,8 +111,8 @@ def index(request):
                 utilization_per_server[hostname] += 1
 
         utilization_per_server[hostname] = round(utilization_per_server[hostname] * 100.0 / len(last_gpu_entry[hostname].keys()))
-    from pprint import pprint
-    pprint(gpu_current_state)
+    #from pprint import pprint
+    #pprint(gpu_current_state)
     utilization_gpu = round(utilization_gpu * 100.0 / num_gpus)
     client.close()
     return render(request, 'index.html', {"num_gpus": num_gpus, "num_servers": num_servers, "utilization_gpu": utilization_gpu, "utilization_per_server": dict(utilization_per_server), "gpu_current_state": dict(gpu_current_state)})
